@@ -1,4 +1,4 @@
-# EJERCICIOS UD3
+# Ejercicios UD3
 
 ## Ejercicios UD3.1 - Configuración
 
