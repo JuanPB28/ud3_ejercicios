@@ -27,15 +27,41 @@ CREATE DATABASE test1;
 SHOW DATABASES;
 ```
 
+> (No es recomendable poner en el Dockerfile datos sensibles como la conatraseña)
+> 
+> Para que funcione los anteriores comandos hay que seguir los siguientes pasos:
+> ```bash
+> docker build -t mariadb .
+> docker run -d -p 3306:3306 --name mariadb-server mariadb
+> ```
+
 ### Ejercicio 4 (1p)
 
 Revisa los ficheros de la carpeta `database/migrations` y contesta a las siguientes preguntas:
 
+1. ¿Qué crees que hace el método `create` de la clase `Schema`?
 
-1. ¿Qué crees que hace el método `create` de la clase `Schema`? 
+    > Crear una tabla.
+
 2. ¿Qué crees que hace `$table->string('email')->primary();`?
+
+    > Crea una columna de tipo string con nombre 'email' la cual será la Primary Key de una base de datos SQL.
+
 3. ¿Cuantas tablas hay definidas? Indica el nombre de cada tabla
 
+    > En el archivo de migración de usuarios hay 3 tablas:
+    >     users,
+    >     password_reset_tokens,
+    >     sessions
+    > 
+    > En el archivo de migración de cache hay 2 tablas:
+    >     cache,
+    >     cache_locks
+    > 
+    > En el archivo de migración de trabajos hay 3 tablas:
+    >     jobs,
+    >     job_batches,
+    >     failed_jobs
 
 ### Ejercicio 5 (1p)
 
@@ -62,20 +88,40 @@ docker exec -it mariadb-server mariadb -u ig -p
 USE test1;
 SHOW TABLES;
 ```
+> No se ha creado el usuario 'ig', así que he ejecutado el comando con el usuario 'root'
 
 - ¿Cuántas tablas aparecen?
+
+    | Tables_in_test1       |
+    |-----------------------|
+    | cache                 |
+    | cache_locks           |
+    | failed_jobs           |
+    | job_batches           |
+    | jobs                  |
+    | migrations            |
+    | password_reset_tokens |
+    | sessions              |
+    | users                 |
 
 ### Ejercicio 6 (1p)
 
 Indica qué realiza los siguientes comandos:
 
-- `php artisan migrate`: 
+- `php artisan migrate`:
+    > Ejecuta todas las migraciones pendientes en la base de datos. Crea las tablas y columnas definidas en las migraciones.
 - `php artisan migrate:status`:
+    > Muestra el estado de cada migración, indicando si ha sido ejecutada o no.
 - `php artisan migrate:rollback`:
+    > Revierte la última operación de migración, deshaciendo los cambios realizados por la última migración ejecutada.
 - `php artisan migrate:reset`:
+    > Revierte todas las migraciones, deshaciendo todos los cambios realizados por todas las migraciones ejecutadas.
 - `php artisan migrate:refresh`:
+    > Revierte todas las migraciones y luego las vuelve a ejecutar. Es útil para restablecer la base de datos a su estado inicial.
 - `php artisan make:migration`:
+    > Crea un nuevo archivo de migración en el directorio database/migrations. Puedes especificar el nombre de la migración y opciones adicionales, como la creación de una tabla o la adición de columnas.
 - `php artisan migrate --seed`:
+    > Ejecuta todas las migraciones pendientes y luego ejecuta los seeders configurados para poblar la base de datos con datos de prueba.
 
 ### Ejercicio 7 (1p)
 
@@ -108,6 +154,11 @@ SHOW TABLES;
 ### Ejercicio 8 (1p)
 
 ¿Qué pasos debemos dar si queremos añadir el campo `$table->string('apellido');` a la tabla alumnos del ejercicio anterior?
+
+dos formas:
+con un rollback
+o haciendo una nueva migración
+
 
 ### Ejercicio 9 (1p)
 
