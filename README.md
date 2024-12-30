@@ -67,7 +67,7 @@ Revisa los ficheros de la carpeta `database/migrations` y contesta a las siguien
 
 Modifica el `.env` de tu aplicación Laravel:
 
-```
+```env
 DB_CONNECTION=mariadb
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -92,7 +92,7 @@ SHOW TABLES;
 
 - ¿Cuántas tablas aparecen?
 
-    | Tables_in_test1       |
+    | **Tables_in_test1**   |
     |-----------------------|
     | cache                 |
     | cache_locks           |
@@ -129,7 +129,7 @@ Crea la base de datos test2 y conecta tu aplicación a dicha base de datos. Empl
 
 Inserta el siguiente código en la función `up()`;
 
-```bash
+```php
 Schema::create('alumnos', function (Blueprint $table) {
     $table->id(); 
     $table->string('nombre'); 
@@ -140,7 +140,7 @@ Schema::create('alumnos', function (Blueprint $table) {
 
 y el siguiente en la función `down()`:
 
-```bash
+```php
 Schema::dropIfExists('alumnos');
 ```
 
@@ -155,10 +155,79 @@ SHOW TABLES;
 
 ¿Qué pasos debemos dar si queremos añadir el campo `$table->string('apellido');` a la tabla alumnos del ejercicio anterior?
 
-dos formas:
-con un rollback
-o haciendo una nueva migración
+> Hay dos formas de añadir el campo:
 
+> **Deshacer la migración:**
+> 1. Revertir la última migración con el comando ```php artisan migrate:rollback```.
+> 2. Modificar el archivo de la migración (my_test_migration.php).
+> ```php
+> <?php
+>
+> use Illuminate\Database\Migrations\Migration;
+> use Illuminate\Database\Schema\Blueprint;
+> use Illuminate\Support\Facades\Schema;
+>
+> return new class extends Migration
+> {
+>     /**
+>      * Run the migrations.
+>      */
+>     public function up(): void
+>     {
+>         Schema::create('alumnos', function (Blueprint $table) {
+>             $table->id(); 
+>             $table->string('nombre'); 
+>             $table->string('apellido'); // Añadir el campo 'apellido'
+>             $table->string('email')->unique(); 
+>             $table->timestamps(); 
+>         });
+>     }
+> 
+>     /**
+>      * Reverse the migrations.
+>      */
+>     public function down(): void
+>     {
+>         Schema::dropIfExists('alumnos');
+>     }
+> };
+> ```
+> 3. Ejecutar la migración nuevamente con el comando ```php artisan migrate```.
+
+> **Crear una nueva migración:**
+> 1. Utilizar el comando ```php artisan make:migration add_apellido --table=alumnos```.
+> 2. Modificar la nueva migración.
+> ```php
+> <?php
+> 
+> use Illuminate\Database\Migrations\Migration;
+> use Illuminate\Database\Schema\Blueprint;
+> use Illuminate\Support\Facades\Schema;
+> 
+> return new class extends Migration
+> {
+>     /**
+>      * Run the migrations.
+>      */
+>     public function up(): void
+>     {
+>         Schema::table('alumnos', function (Blueprint $table) {
+>             $table->string('apellido')->after('nombre');
+>         });
+>     }
+> 
+>     /**
+>      * Reverse the migrations.
+>      */
+>     public function down(): void
+>     {
+>         Schema::table('alumnos', function (Blueprint $table) {
+>             $table->dropColumn('apellido');
+>         });
+>     }
+> };
+> ```
+> 3. Ejecutar la migración con el comando ```php artisan migrate```.
 
 ### Ejercicio 9 (1p)
 
