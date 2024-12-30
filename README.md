@@ -27,21 +27,47 @@ CREATE DATABASE test1;
 SHOW DATABASES;
 ```
 
+> (No es recomendable poner en el Dockerfile datos sensibles como la conatraseña)
+> 
+> Para que funcione los anteriores comandos hay que seguir los siguientes pasos:
+> ```bash
+> docker build -t mariadb .
+> docker run -d -p 3306:3306 --name mariadb-server mariadb
+> ```
+
 ### Ejercicio 4 (1p)
 
 Revisa los ficheros de la carpeta `database/migrations` y contesta a las siguientes preguntas:
 
+1. ¿Qué crees que hace el método `create` de la clase `Schema`?
 
-1. ¿Qué crees que hace el método `create` de la clase `Schema`? 
+    > Crear una tabla.
+
 2. ¿Qué crees que hace `$table->string('email')->primary();`?
+
+    > Crea una columna de tipo string con nombre 'email' la cual será la Primary Key de una base de datos SQL.
+
 3. ¿Cuantas tablas hay definidas? Indica el nombre de cada tabla
 
+    > En el archivo de migración de usuarios hay 3 tablas:
+    >     users,
+    >     password_reset_tokens,
+    >     sessions
+    > 
+    > En el archivo de migración de cache hay 2 tablas:
+    >     cache,
+    >     cache_locks
+    > 
+    > En el archivo de migración de trabajos hay 3 tablas:
+    >     jobs,
+    >     job_batches,
+    >     failed_jobs
 
 ### Ejercicio 5 (1p)
 
 Modifica el `.env` de tu aplicación Laravel:
 
-```
+```env
 DB_CONNECTION=mariadb
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -62,20 +88,40 @@ docker exec -it mariadb-server mariadb -u ig -p
 USE test1;
 SHOW TABLES;
 ```
+> No se ha creado el usuario 'ig', así que he ejecutado el comando con el usuario 'root'
 
 - ¿Cuántas tablas aparecen?
+
+    | **Tables_in_test1**   |
+    |-----------------------|
+    | cache                 |
+    | cache_locks           |
+    | failed_jobs           |
+    | job_batches           |
+    | jobs                  |
+    | migrations            |
+    | password_reset_tokens |
+    | sessions              |
+    | users                 |
 
 ### Ejercicio 6 (1p)
 
 Indica qué realiza los siguientes comandos:
 
-- `php artisan migrate`: 
+- `php artisan migrate`:
+    > Ejecuta todas las migraciones pendientes en la base de datos. Crea las tablas y columnas definidas en las migraciones.
 - `php artisan migrate:status`:
+    > Muestra el estado de cada migración, indicando si ha sido ejecutada o no.
 - `php artisan migrate:rollback`:
+    > Revierte la última operación de migración, deshaciendo los cambios realizados por la última migración ejecutada.
 - `php artisan migrate:reset`:
+    > Revierte todas las migraciones, deshaciendo todos los cambios realizados por todas las migraciones ejecutadas.
 - `php artisan migrate:refresh`:
+    > Revierte todas las migraciones y luego las vuelve a ejecutar. Es útil para restablecer la base de datos a su estado inicial.
 - `php artisan make:migration`:
+    > Crea un nuevo archivo de migración en el directorio database/migrations. Puedes especificar el nombre de la migración y opciones adicionales, como la creación de una tabla o la adición de columnas.
 - `php artisan migrate --seed`:
+    > Ejecuta todas las migraciones pendientes y luego ejecuta los seeders configurados para poblar la base de datos con datos de prueba.
 
 ### Ejercicio 7 (1p)
 
@@ -83,7 +129,7 @@ Crea la base de datos test2 y conecta tu aplicación a dicha base de datos. Empl
 
 Inserta el siguiente código en la función `up()`;
 
-```bash
+```php
 Schema::create('alumnos', function (Blueprint $table) {
     $table->id(); 
     $table->string('nombre'); 
@@ -94,7 +140,7 @@ Schema::create('alumnos', function (Blueprint $table) {
 
 y el siguiente en la función `down()`:
 
-```bash
+```php
 Schema::dropIfExists('alumnos');
 ```
 
@@ -108,6 +154,80 @@ SHOW TABLES;
 ### Ejercicio 8 (1p)
 
 ¿Qué pasos debemos dar si queremos añadir el campo `$table->string('apellido');` a la tabla alumnos del ejercicio anterior?
+
+> Hay dos formas de añadir el campo:
+
+> **Deshacer la migración:**
+> 1. Revertir la última migración con el comando ```php artisan migrate:rollback```.
+> 2. Modificar el archivo de la migración (my_test_migration.php).
+> ```php
+> <?php
+>
+> use Illuminate\Database\Migrations\Migration;
+> use Illuminate\Database\Schema\Blueprint;
+> use Illuminate\Support\Facades\Schema;
+>
+> return new class extends Migration
+> {
+>     /**
+>      * Run the migrations.
+>      */
+>     public function up(): void
+>     {
+>         Schema::create('alumnos', function (Blueprint $table) {
+>             $table->id(); 
+>             $table->string('nombre'); 
+>             $table->string('apellido'); // Añadir el campo 'apellido'
+>             $table->string('email')->unique(); 
+>             $table->timestamps(); 
+>         });
+>     }
+> 
+>     /**
+>      * Reverse the migrations.
+>      */
+>     public function down(): void
+>     {
+>         Schema::dropIfExists('alumnos');
+>     }
+> };
+> ```
+> 3. Ejecutar la migración nuevamente con el comando ```php artisan migrate```.
+
+> **Crear una nueva migración:**
+> 1. Utilizar el comando ```php artisan make:migration add_apellido --table=alumnos```.
+> 2. Modificar la nueva migración.
+> ```php
+> <?php
+> 
+> use Illuminate\Database\Migrations\Migration;
+> use Illuminate\Database\Schema\Blueprint;
+> use Illuminate\Support\Facades\Schema;
+> 
+> return new class extends Migration
+> {
+>     /**
+>      * Run the migrations.
+>      */
+>     public function up(): void
+>     {
+>         Schema::table('alumnos', function (Blueprint $table) {
+>             $table->string('apellido')->after('nombre');
+>         });
+>     }
+> 
+>     /**
+>      * Reverse the migrations.
+>      */
+>     public function down(): void
+>     {
+>         Schema::table('alumnos', function (Blueprint $table) {
+>             $table->dropColumn('apellido');
+>         });
+>     }
+> };
+> ```
+> 3. Ejecutar la migración con el comando ```php artisan migrate```.
 
 ### Ejercicio 9 (1p)
 
@@ -155,6 +275,12 @@ $this->call(AlumnosTableSeeder::class);
 
 4. Ejecuta: `php artisan db:seed`
 5. Muestra el contenido de la tabla alumnos y comprueba que se han creado correctamente.
+
+    | **id** | **nombre**     | **email**                  | **created_at**      | **created_at**      |
+    |--------|----------------|----------------------------|---------------------|---------------------|
+    | 1      | Juan Pérez     | juan.perez@example.com     | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
+    | 2      | María González | maria.gonzalez@example.com | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
+    | 3      | Carlos López   | carlos.lopez@example.com   | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
 
 ## Conceptos clave para el Ejercicio 10
 
