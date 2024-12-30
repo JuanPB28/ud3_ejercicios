@@ -276,6 +276,12 @@ $this->call(AlumnosTableSeeder::class);
 4. Ejecuta: `php artisan db:seed`
 5. Muestra el contenido de la tabla alumnos y comprueba que se han creado correctamente.
 
+    | **id** | **nombre**     | **email**                  | **created_at**      | **created_at**      |
+    |--------|----------------|----------------------------|---------------------|---------------------|
+    | 1      | Juan Pérez     | juan.perez@example.com     | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
+    | 2      | María González | maria.gonzalez@example.com | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
+    | 3      | Carlos López   | carlos.lopez@example.com   | 2024-12-30 12:54:30 | 2024-12-30 12:54:30 |
+
 ## Conceptos clave para el Ejercicio 10
 
 Modelar datos en un diagrama Entidad-Relación nos permite representar de manera gráfica y conceptual la estructura de los datos de un sistema. Este modelo se utiliza principalmente en la etapa de diseño de bases de datos para comprender, organizar y definir cómo se almacenarán los datos y cómo se relacionarán entre sí.
