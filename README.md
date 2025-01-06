@@ -349,21 +349,21 @@ Implementa las operaciones Crear, Leer, Actualizar y Borrar (CRUD en inglés) me
 
 Implementa las operaciones Crear, Leer, Actualizar y Borrar (CRUD en inglés) mediante los siguientes endpoints. Debes usar el método create() para la creación de un registro.
 
-- GET /api/notas -> devuelve todos los notas
-- GET /api/notas/*id* -> devuelve el alumno *id*
-- POST /api/notas -> crea un nuevo alumno
-- PUT /api/notas/*id* -> actualiza el alumno *id*
-- DELETE /api/notas/*id* -> borra el alumno *id*
+- GET /api/asignaturas -> devuelve todas las asignaturas
+- GET /api/asignaturas/*id* -> devuelve la asignatura *id*
+- POST /api/asignaturas -> crea una nueva asignatura
+- PUT /api/asignaturas/*id* -> actualiza la asignatura *id*
+- DELETE /api/asignaturas/*id* -> borra la asignatura *id*
 
 ### Ejercicio 4 (1.5p)
 
 Implementa las operaciones Crear, Leer, Actualizar y Borrar (CRUD en inglés) mediante los siguientes endpoints. Debes usar el método create() para la creación de un registro.
 
-- GET /api/notas -> devuelve todos los notas
-- GET /api/notas/*id* -> devuelve el alumno *id*
-- POST /api/notas -> crea un nuevo alumno
-- PUT /api/notas/*id* -> actualiza el alumno *id*
-- DELETE /api/notas/*id* -> borra el alumno *id*
+- GET /api/notas -> devuelve todas las notas
+- GET /api/notas/*id* -> devuelve la nota *id*
+- POST /api/notas -> crea una nueva nota
+- PUT /api/notas/*id* -> actualiza la nota *id*
+- DELETE /api/notas/*id* -> borra la nota *id*
 
 ### Material complementario para el ejercicio 5
 
