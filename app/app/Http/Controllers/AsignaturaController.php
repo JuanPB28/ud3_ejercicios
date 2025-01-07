@@ -70,7 +70,7 @@ class AsignaturaController extends Controller
         try {
             $asignatura = Asignatura::find($id);
             if ($asignatura) {
-                $asignatura->update($request->all());
+                $asignatura->update($request->only('nombre', 'descripcion'));
                 return response()->json($asignatura);
             } else {
                 return response()->json(['message' => 'Asignatura no encontrada'], 404);

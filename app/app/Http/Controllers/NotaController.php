@@ -70,7 +70,7 @@ class NotaController extends Controller
         try {
             $nota = Nota::find($id);
             if ($nota) {
-                $nota->update($request->all());
+                $nota->update($request->only('alumno_id', 'asignatura_id', 'nota'));
                 return response()->json($nota);
             } else {
                 return response()->json(['message' => 'Nota no encontrada'], 404);

@@ -70,7 +70,7 @@ class AlumnoController extends Controller
         try {
             $alumno = Alumno::find($id);
             if ($alumno) {
-                $alumno->update($request->all());
+                $alumno->update($request->only('nombre', 'email'));
                 return response()->json($alumno, 200);
             } else {
                 return response()->json(['message' => 'Alumno no encontrado'], 404);
