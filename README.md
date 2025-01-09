@@ -1,3 +1,47 @@
+# Way of working
+
+## Requisitos
+
+1. PHP
+2. Composer
+3. Laravel
+4. Node.js y NPM
+5. Docker Engine
+6. Postman
+7. Tener descargado el proyecto
+
+## Configuración
+
+1. Construir y ejecutar el contenedor de MariaDB con Docker:
+```bash
+docker build -t mariadb .
+docker run -d -p 3306:3306 --name mariadb-server mariadb
+```
+2. Entrar en la carpeta del proyecto de laravel ```/app```.
+3. Instalar dependencias de PHP: 
+```bash
+composer install
+```
+4. Asegurarse de que el ```.env``` tiene los siguientes parámetros:
+```env
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=test1
+DB_USERNAME=root
+DB_PASSWORD=m1_s3cr3t
+```
+5. Ejecutar las migraciones y seeders:
+```bash
+php artisan migrate --seed
+```
+6. Correr el servicio de Laravel: 
+```bash
+php artisan serve
+```
+
+---
+
 # Ejercicios UD3
 
 ## Ejercicios UD3.1 - Configuración
