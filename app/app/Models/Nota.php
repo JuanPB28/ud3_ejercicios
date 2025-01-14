@@ -8,7 +8,7 @@ class Nota extends Model
 {
     protected $table = 'Nota';
     protected $fillable = ['alumno_id', 'asignatura_id', 'nota'];
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function alumno()
     {

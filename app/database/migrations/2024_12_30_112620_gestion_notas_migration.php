@@ -28,8 +28,7 @@ return new class extends Migration
             $table->foreignId('alumno_id')->constrained('Alumno');
             $table->foreignId('asignatura_id')->constrained('Asignatura');
             $table->float('nota');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamps();
         });
     }
 
