@@ -10,13 +10,11 @@ class Alumno extends Model
     protected $fillable = ['nombre', 'email'];
     public $timestamps = false;
 
-    //
     public function notas()
     {
         return $this->hasMany(Nota::class, 'alumno_id');
     }
 
-    // Puede que no sea necesario uno de los dos métodos
     public function asignaturas()
     {
         return $this->belongsToMany(Asignatura::class, 'Nota', 'alumno_id', 'asignatura_id');
