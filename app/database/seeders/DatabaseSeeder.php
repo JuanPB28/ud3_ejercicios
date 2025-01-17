@@ -13,5 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(GestionNotasSeeder::class);
+        $this->call(PerfilSeeder::class);
+        $this->call(PostSeeder::class);
     }
 }

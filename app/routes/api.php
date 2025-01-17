@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\NotaController;
+use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\PostController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -32,3 +34,18 @@ Route::get('/notas/{id}', [NotaController::class, 'show']);
 Route::post('/notas', [NotaController::class, 'store']);
 Route::put('/notas/{id}', [NotaController::class, 'update']);
 Route::delete('/notas/{id}', [NotaController::class, 'destroy']);
+
+Route::apiResource('perfiles', PerfilController::class);
+Route::get('/perfiles', [PerfilController::class, 'index']);
+Route::get('/perfiles/{id}', [PerfilController::class, 'show']);
+Route::post('/perfiles', [PerfilController::class, 'store']);
+Route::put('/perfiles/{id}', [PerfilController::class, 'update']);
+Route::delete('/perfiles/{id}', [PerfilController::class, 'destroy']);
+
+Route::apiResource('posts', PostController::class);
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{id}', [PostController::class, 'show']);
+Route::post('/posts', [PostController::class, 'store']);
+Route::put('/posts/{id}', [PostController::class, 'update']);
+Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+Route::get('/posts/user/{id}', [PostController::class, 'postsByUser']);
