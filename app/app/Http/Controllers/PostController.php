@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumno;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -107,7 +108,7 @@ class PostController extends Controller
     public function postsByUser(int $id): JsonResponse
     {
         try {
-            return response()->json(Post::where('usuario_id', $id)->get());
+            return response()->json(Alumno::find($id)->posts);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error al obtener los posts'], 500);
         }

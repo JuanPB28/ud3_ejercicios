@@ -14,4 +14,9 @@ class Asignatura extends Model
     {
         return $this->hasMany(Nota::class, 'asignatura_id');
     }
+
+    public function alumnos()
+    {
+        return $this->belongsToMany(Alumno::class, 'Nota', 'asignatura_id', 'alumno_id');
+    }
 }
